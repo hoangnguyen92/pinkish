@@ -24,3 +24,5 @@ nbdist/
 .nb-gradle/
 .mvn/
 .settings/
+
+src/main/resources/rebel.xml

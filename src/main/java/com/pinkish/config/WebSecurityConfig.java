@@ -31,15 +31,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/hello").access("hasRole('ROLE_ADMIN')").anyRequest().permitAll().and()
-				.formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password").and()
-				.logout().logoutSuccessUrl("/login?logout").and().exceptionHandling().accessDeniedPage("/403").and()
-				.csrf();
+		 http.authorizeRequests()
+	         .antMatchers("/", "/hello").authenticated()
+	         .anyRequest().authenticated()
+	         .and()
+	     .formLogin()
+	         .loginPage("/login")
+	         .permitAll()
+	         .and()
+	     .logout()
+	         .permitAll();
 	}
 
 	@Bean(name = "passwordEncoder")
 	public PasswordEncoder passwordencoder() {
-		BCryptPasswordEncoder a = new BCryptPasswordEncoder();
 		return new BCryptPasswordEncoder();
 	}
 }
