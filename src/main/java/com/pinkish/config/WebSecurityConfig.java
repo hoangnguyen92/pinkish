@@ -13,12 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.pinkish.security.CustomUserDetailsService;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackageClasses = CustomUserDetailsService.class)
+@ComponentScan(basePackages = {"com.pinkish.controller","com.pinkish.security"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -32,14 +31,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		 http.authorizeRequests()
-	         .antMatchers("/", "/hello").authenticated()
+		 	.antMatchers("/css/**","/js/**").permitAll()
+	         .antMatchers("/", "/home").authenticated()
 	         .anyRequest().authenticated()
 	         .and()
 	     .formLogin()
 	         .loginPage("/login")
 	         .permitAll()
 	         .and()
-	     .logout()
+	     .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
 	         .permitAll();
 	}
 

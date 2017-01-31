@@ -1,0 +1,57 @@
+<div class="container" id="employees" >
+	<div class="row">
+		<div class="col-sm-12">
+			<table id="sample" style="width: 100%">
+				<thead>
+					<tr>
+		                <th>First name</th>
+		                <th>Last name</th>
+		                <th>Email</th>
+		                <th>Phone</th>
+		                <th>Weekly rate</th>
+		            </tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script>
+(function($, app) {
+	
+	function ViewModel() {
+		var self = this;
+
+		this.render = function() {
+			ko.applyBindings(self, document.getElementById("employees"));
+			var table = $('#sample').DataTable({
+		        'ajax' : '/data/users',
+		        'serverSide' : true,
+		        columns : [
+		        	{ "data": "firstname",
+		        	  "name": "firstname"
+		        	},
+		            { "data": "lastname",
+			          "name": "lastname" 
+			        },
+		            { "data": "email",
+				      "name": "email" 
+				    },
+		            { "data": "phone",
+					  "name": "phone" 
+					},
+		            { "data": "weeklyRate",
+					  "name": "weeklyRate" 
+					}
+				]
+		    }); 
+		};
+	
+	};
+
+	// ready
+	var model = new ViewModel();
+	model.render();
+
+})(jQuery, window.mb);
+</script>

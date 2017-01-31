@@ -17,3 +17,16 @@ CREATE TABLE [pinkish].[dbo].[users](
 	[username] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+
+CREATE TABLE [pinkish].[dbo].[employees](
+	[id] [int] IDENTITY(4711,1) NOT FOR REPLICATION NOT NULL,
+	[firstname] [nvarchar](50) NULL,
+	[lastname] [nvarchar](50) NULL,
+	[phone] [nvarchar](15) NULL,
+	[email] [nvarchar](100) NULL,
+	[weekly_rate] DECIMAL(12,6)
+ CONSTRAINT [PK_employees] PRIMARY KEY NONCLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]

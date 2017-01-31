@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Pinkish</title>
+		<link rel="stylesheet" href="/css/jquery-ui.css" type="text/css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+		<!-- 
+		<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" /> -->
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.13/datatables.min.css"/>
+		<!-- <link rel="stylesheet" href="/css/bootstrap-theme.min.css" type="text/css" /> -->
+    </head>
+    <body>
+    	<div id="app" class="container">
+    		<nav class="navbar navbar-default">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="/home">Pinkish</a>
+			    </div>
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Management<span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="#" data-bind="event:{click: loadPage('#employees') }">Employees</a></li>
+			            <li><a href="#" data-bind="event:{click: loadPage('#employee-payments') }">Employee payments</a></li>
+			            <li><a href="#">Pay to employee</a></li>
+			          </ul>
+			        </li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Items<span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="#">All Items</a></li>
+			          </ul>
+			        </li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Vendors<span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="#">All Vendors</a></li>
+			            <li><a href="#">Sales Order</a></li>
+			            <li><a href="#">Receive Order</a></li>
+			            <li><a href="#">Order Payment</a></li>
+			            <li><a href="#">Paid Orders</a></li>
+			            <li><a href="#">Unpaid Orders</a></li>
+			          </ul>
+			        </li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Customers<span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="#">All Customers</a></li>
+			          </ul>
+			        </li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sales Orders<span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="#">All Sales Orders</a></li>
+			          </ul>
+			        </li>
+			        <li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reporting<span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="#">Total Balance</a></li>
+			            <li><a href="#">Report by most sold products</a></li>
+			            <li><a href="#">Report by customers</a></li>
+			          </ul>
+			        </li>
+			      </ul>
+			      <ul class="nav navbar-nav navbar-right">
+					<li><a href="/logout" class="btn btn-default">Sign Out</a> </li>
+				  </ul>
+			    </div>
+			  </div>
+			</nav>
+			
+			<div id="container">
+				<div id="employees" class="page-container" data-page="/employees.html"></div>
+				<div id="employee-payments" class="page-container" data-page="/employee-payments.html"></div>
+			</div>
+    	</div>
+ 
+        <!-- <script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script> -->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.13/datatables.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-ui.js"></script>
+		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/knockout-3.4.1.js"></script>
+		<script type="text/javascript" src="/js/jquery.spring-friendly.min.js"></script>
+		<!-- <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script> -->
+		
+		<script type="text/javascript">
+			$.fn.loadEmbedded = function(callback){
+				var container = $(this);
+				$(".page-container").hide();
+				if(container.is(":empty")) {
+					var page = container.data("page");
+					if(page) {
+						var params = container.data("page-params");
+						if(params)
+							page += "?" + params;
+						container.load(page, callback);
+					}
+				}
+				$(this).show();
+			};
+			(function($, app) {
+				var loaded = false;
+				function ViewModel() {
+					var self = this;
+		
+					this.render = function() {
+						ko.applyBindings(self, document.getElementById("app"));
+					};
+					
+					this.loadPage=function(selected){
+						if(loaded){
+							$(selected).loadEmbedded(function(response, status, xhr) {
+								if (status == "error") {
+									if (xhr.status == 403)
+										$(this).html(response);
+									else {
+										var msg = "Error occurred during load: ";
+										$(this).html(msg + xhr.status + " " + xhr.statusText );
+									}
+								}
+							});
+						}
+					};
+					
+				};
+		
+				// ready
+				var model = new ViewModel();
+				model.render();
+				loaded = true;
+			})(jQuery, window.mb);
+		</script>
+    </body>
+</html>
