@@ -19,7 +19,7 @@ public class Application {
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) throws Throwable {
-    	 SpringApplication springApplication = new SpringApplication(Application.class);
+    	SpringApplication springApplication = new SpringApplication(Application.class);
         
         ApplicationContext ctx = springApplication.run(args);
         logger.info("Let's inspect the beans provided by Spring Boot:");

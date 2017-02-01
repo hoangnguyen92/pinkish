@@ -30,17 +30,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		 http.authorizeRequests()
-		 	.antMatchers("/css/**","/js/**").permitAll()
-	         .antMatchers("/", "/home").authenticated()
-	         .anyRequest().authenticated()
-	         .and()
-	     .formLogin()
-	         .loginPage("/login")
-	         .permitAll()
-	         .and()
-	     .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
-	         .permitAll();
+		http.csrf().disable();
+		http.authorizeRequests().antMatchers("/css/**", "/js/**").permitAll().antMatchers("/", "/home").authenticated()
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+				.permitAll();
 	}
 
 	@Bean(name = "passwordEncoder")
