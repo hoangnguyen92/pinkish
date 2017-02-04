@@ -46,7 +46,7 @@ CREATE TABLE [pinkish].[dbo].[vendors](
 	[id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
 	[name] NVARCHAR(100),
 	[address] NVARCHAR(100),
-	[telephone] NVARCHAR(10),
+	[telephone] NVARCHAR(100),
 	[mol] NVARCHAR(50)
  CONSTRAINT [PK_vendors] PRIMARY KEY NONCLUSTERED 
 (
@@ -59,7 +59,7 @@ CREATE TABLE [pinkish].[dbo].[customers](
 	[id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
 	[name] NVARCHAR(100),
 	[address] NVARCHAR(100),
-	[telephone] NVARCHAR(10),
+	[telephone] NVARCHAR(100),
 	[mol] NVARCHAR(50)
  CONSTRAINT [PK_customers] PRIMARY KEY NONCLUSTERED 
 (

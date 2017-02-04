@@ -12,26 +12,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.pinkish.domain.Customer;
+import com.pinkish.domain.CustomersDataTableRepository;
 import com.pinkish.domain.Vendor;
 import com.pinkish.domain.VendorsDataTableRepository;
 
 @RestController()
-@RequestMapping("/vendors")
-public class VendorRestController {
-	private static final Logger logger = LoggerFactory.getLogger(VendorRestController.class);
+@RequestMapping("/customers")
+public class CustomerRestController {
+	private static final Logger logger = LoggerFactory.getLogger(CustomerRestController.class);
 	@Autowired
-    private VendorsDataTableRepository vendorsDataTableRepository;
+    private CustomersDataTableRepository customersDataTableRepository;
 	
 	
     @JsonView(DataTablesOutput.View.class)
     @RequestMapping(value = "/data", method = RequestMethod.GET)
-    public DataTablesOutput<Vendor> getVendors(@Valid DataTablesInput input) {
-        return vendorsDataTableRepository.findAll(input);
+    public DataTablesOutput<Customer> getVendors(@Valid DataTablesInput input) {
+        return customersDataTableRepository.findAll(input);
     }
     
     @RequestMapping(value= "/add", method = RequestMethod.POST)
-	public Vendor addPerson(Vendor vendor){
-    	return vendorsDataTableRepository.save(vendor);
+	public Customer addPerson(Customer customer){
+    	return customersDataTableRepository.save(customer);
 	}
 	
 }

@@ -33,7 +33,7 @@ public class Item implements Serializable{
 	@JsonView(DataTablesOutput.View.class)
 	private String name;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
  	@JoinColumn(name = "category_id", referencedColumnName = "id", nullable = true)
  	private Category category;
 	
@@ -48,6 +48,10 @@ public class Item implements Serializable{
     @Column(name = "price", nullable = true)
     @JsonView(DataTablesOutput.View.class)
     private BigDecimal price;
+    
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+ 	@JoinColumn(name = "vendor_id", referencedColumnName = "id", nullable = true)
+ 	private Vendor vendor;
 
 	public int getId() {
 		return id;
@@ -95,6 +99,14 @@ public class Item implements Serializable{
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Vendor getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(Vendor vendor) {
+		this.vendor = vendor;
 	}
 	
 }
