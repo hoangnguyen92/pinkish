@@ -23,31 +23,26 @@
 			        <li class="dropdown">
 			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Management<span class="caret"></span></a>
 			          <ul class="dropdown-menu" role="menu">
-			            <li><a href="#" data-bind="event:{click: loadPage('#employees') }">Employees</a></li>
-			            <li><a href="#" data-bind="event:{click: loadPage('#employee-payments') }">Employee payments</a></li>
+			            <li><a href="#employees" data-bind="event:{click: loadPage('#employees') }">Employees</a></li>
+			            <li><a href="#employees-payments" data-bind="event:{click: loadPage('#employee-payments') }">Employee payments</a></li>
 			          </ul>
 			        </li>
 			        <li class="dropdown">
 			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Items<span class="caret"></span></a>
 			          <ul class="dropdown-menu" role="menu">
-			            <li><a href="#">All Items</a></li>
+			            <li><a href="#" data-bind="event:{click: loadPage('#items') }">All Items</a></li>
 			          </ul>
 			        </li>
 			        <li class="dropdown">
 			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Vendors<span class="caret"></span></a>
 			          <ul class="dropdown-menu" role="menu">
-			            <li><a href="#">All Vendors</a></li>
-			            <li><a href="#">Sales Order</a></li>
-			            <li><a href="#">Receive Order</a></li>
-			            <li><a href="#">Order Payment</a></li>
-			            <li><a href="#">Paid Orders</a></li>
-			            <li><a href="#">Unpaid Orders</a></li>
+			            <li><a href="#vendors" data-bind="event:{click: loadPage('#vendors') }">All Vendors</a></li>
 			          </ul>
 			        </li>
 			        <li class="dropdown">
 			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Customers<span class="caret"></span></a>
 			          <ul class="dropdown-menu" role="menu">
-			            <li><a href="#">All Customers</a></li>
+			            <li><a href="#" data-bind="event:{click: loadPage('#customers') }">All Customers</a></li>
 			          </ul>
 			        </li>
 			        <li class="dropdown">
@@ -75,6 +70,9 @@
 			<div id="container">
 				<div id="employees" class="page-container" data-page="/employees.html"></div>
 				<div id="employee-payments" class="page-container" data-page="/employee-payments.html"></div>
+				<div id="items" class="page-container" data-page="/items.html"></div>
+				<div id="vendors" class="page-container" data-page="/vendors.html"></div>
+				<div id="customers" class="page-container" data-page="/customers.html"></div>
 			</div>
     	</div>
  
@@ -105,6 +103,20 @@
 			};
 			(function($, app) {
 				var loaded = false;
+				var selector = window.location.hash;
+				if(selector){
+					$(selector).loadEmbedded(function(response, status, xhr) {
+						if (status == "error") {
+							if (xhr.status == 403)
+								$(this).html(response);
+							else {
+								var msg = "Error occurred during load: ";
+								$(this).html(msg + xhr.status + " " + xhr.statusText );
+							}
+						}
+					});
+				}
+				
 				function ViewModel() {
 					var self = this;
 		

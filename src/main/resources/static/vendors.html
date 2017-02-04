@@ -1,0 +1,102 @@
+<div class="container" id="vendors" >
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="col-sm-4">
+				<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#myModal">Create New Vendor</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<table id="vendorsGrid" style="width: 100%">
+				<thead>
+					<tr>
+		                <th>Name</th>
+		                <th>Address</th>
+		                <th>Telephone</th>
+		                <th>Mol</th>
+		            </tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+	        	<h4 class="modal-title">Create New Vendor</h4>
+			</div>
+			<div class="modal-body">
+				<form id="createVendor" action="#">
+					<div class="form-group">
+						<label for="sum">Name</label>
+						<input type="text" class="form-control" id="name" name="name" placeholder="Enter vendors name">
+					</div>
+					<div class="form-group">
+						<label for="sum">Address</label>
+						<input type="text" class="form-control" id="address" name="address" placeholder="Enter vendors address">
+					</div>
+					<div class="form-group">
+						<label for="sum">Telephone</label>
+						<input type="text" class="form-control" id="telephone" name="telephone" placeholder="Enter vendors telephone">
+					</div>
+					<div class="form-group">
+						<label for="sum">Mol</label>
+						<input type="text" class="form-control" id="mol" name="mol" placeholder="Enter vendors mol">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" data-bind="event:{click: saveVendor}">Save</button>
+			</div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+<script>
+(function($, app) {
+	
+	function ViewModel() {
+		var self = this;
+		this.saveVendor = function(){
+			$("#createVendor").ajaxSubmit({
+				url: '/vendors/add', 
+				type: 'post',
+				success	: function (item) {
+					$("#vendorsGrid").dataTable().fnDraw();
+				}
+			});
+		}
+		this.render = function() {
+			ko.applyBindings(self, document.getElementById("vendors"));
+			var table = $('#vendorsGrid').DataTable({
+		        'ajax' : '/vendors/data',
+		        'serverSide' : true,
+		        columns : [
+		        	{ "data": "name",
+		        	  "name": "name"
+		        	},
+		            { "data": "address",
+			          "name": "address" 
+			        },
+		            { "data": "telephone",
+				      "name": "telephone" 
+				    },
+		            { "data": "mol",
+					  "name": "mol" 
+					}
+				]
+		    }); 
+		};
+	
+	};
+
+	// ready
+	var model = new ViewModel();
+	model.render();
+
+})(jQuery, window.mb);
+</script>

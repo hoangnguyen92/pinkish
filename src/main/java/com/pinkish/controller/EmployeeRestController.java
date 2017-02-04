@@ -23,12 +23,15 @@ import com.pinkish.domain.EmployeePayment;
 import com.pinkish.domain.EmployeesDataTableRepository;
 import com.pinkish.domain.EmployeesPaymentRepository;
 import com.pinkish.domain.EmployeesRepository;
+import com.pinkish.domain.VendorsDataTableRepository;
 
 @RestController
 public class EmployeeRestController {
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeRestController.class);
 	@Autowired
     private EmployeesDataTableRepository employeesDataTableRepository;
+	@Autowired
+    private VendorsDataTableRepository vendorsDataTableRepository;
 	
 	@Autowired
     private EmployeesPaymentRepository employeesPaymentRepository;
@@ -55,8 +58,6 @@ public class EmployeeRestController {
     
     @RequestMapping(value= "/employee-payment/add", method = RequestMethod.POST)
 	public EmployeePayment addPerson(@FormParam("employeeId") int employeeId,@FormParam("sum") double sum){
-    	logger.info(employeeId +"===========================" + sum);
-    	
     	Employee emp = employeesRepository.findById(employeeId);
     	EmployeePayment ep = new EmployeePayment();
     	ep.setEmployee(emp);
@@ -64,5 +65,5 @@ public class EmployeeRestController {
     	ep.setSum(new BigDecimal(sum));
 		return employeesPaymentRepository.save(ep);
 	}
-	
+    
 }
