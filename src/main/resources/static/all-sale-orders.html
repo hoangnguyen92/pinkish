@@ -1,0 +1,127 @@
+<div class="container" id="all-sale-orders" >
+	<!-- <div class="row">
+		<div class="col-sm-12">
+			<div id="startfrom" class="form-group col-sm-4">
+				<label for="from">FROM</label>
+				<input type="text" id="from" name="From" class="form-control" >
+			</div>
+			<div id="endto" class="form-group col-sm-4">
+				<label for="to">TO</label>
+				<input type="text" id="to" name="To" class="form-control" >
+			</div>
+			<div class="col-sm-4">
+				<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#myModal">Create New Payment</button>
+			</div>
+		</div>
+	</div> -->
+	<div class="row">
+		<div class="col-sm-12">
+			<table id="employees-payment-data-table" style="width: 100%">
+				<thead>
+					<tr>
+		                <th>Type</th>
+		                <th>Vendor</th>
+		                <th>Customer</th>
+		                <th>Sum</th>
+		                <th>Status</th>
+		                <th></th>
+		            </tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script>
+/* $.fn.dataTableExt.afnFiltering.push(function(oSettings, aData, iDataIndex){
+	var dateStart = $("#from").datepicker('getDate')
+	var dateEnd = $("#to").datepicker('getDate');
+
+	var from = aData[1].split("/");
+	var evalDate = new Date(from[2], from[1] - 1, from[0]);
+	if ((dateStart == null && dateEnd== null) ||
+        (dateStart == null  && evalDate.getTime() <= dateEnd.getTime()) ||
+        (dateStart.getTime() <= evalDate.getTime() && dateEnd== null) ||
+        (dateStart.getTime() <= evalDate.getTime() && evalDate.getTime() <= dateEnd.getTime()))
+       {
+           return true;
+       }
+	return false;
+}); */
+(function($, app) {
+	
+	function pay(id){
+		console.log(id);
+	}
+	
+	function ViewModel() {
+		var self = this;
+		this.render = function() {
+			$.getJSON("/sale-order/data", function(data) {
+				var dataTable=[];
+				data.forEach(function(item){
+					var i = {
+						id: item.id,
+						type: item.type,
+						sum: item.sum,
+						status: item.status	
+					};
+					if(item.vendor)
+						i.vendor=item.vendor.name;
+					else
+						i.vendor="";
+					if(item.customer)
+						i.customer=item.customer.name;
+					else
+						i.customer="";
+					dataTable.push(i);
+				});
+				
+				$('#employees-payment-data-table').DataTable({
+			        data:dataTable,
+			        "columnDefs": [{
+			            "targets": 5,
+			            "render": function ( data, type, full, meta ) {
+			            	if(full.status === 1)
+			            		return '<button type="button" class="btn btn-info btn-sm pull-right" onclick=pay('+full.id+')">Pay</button>';
+			            }
+			        },{
+			            "targets": 4,
+			            "data": "status",
+			            "render": function ( data, type, full, meta ) {
+			            	if(data === 1)
+			            		return 'Unpaid';
+			            	if(data === 2)
+			            		return 'Paid';
+							return '';
+			            }
+			        }],
+			        columns : [
+						{ "data": "type",
+						  "name": "type"
+						},
+			        	{ "data": "vendor",
+			        	  "name": "vendor"
+			        	},
+			            { "data": "customer",
+				          "name": "customer"
+				        },
+			            { "data": "sum",
+					      "name": "sum" 
+					    },
+			            { "data": "status",
+					      "name": "status" 
+					    }
+					]
+			    }); 
+			});
+			ko.applyBindings(self, document.getElementById("all-sale-orders"));
+		};
+	
+	};
+
+	// ready
+	var model = new ViewModel();
+	model.render();
+})(jQuery, window.mb);
+</script>
