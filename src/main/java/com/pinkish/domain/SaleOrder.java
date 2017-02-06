@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
@@ -60,6 +61,7 @@ public class SaleOrder implements Serializable{
     private BigDecimal discount;
     
     @OneToMany(mappedBy="saleOrder")
+    @JsonIgnore
     private List<SaleOrderItem> items;
 
 	public int getId() {

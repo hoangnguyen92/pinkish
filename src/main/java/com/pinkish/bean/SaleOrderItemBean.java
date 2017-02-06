@@ -10,6 +10,7 @@ public class SaleOrderItemBean implements Serializable{
 	private Integer quantity;
 	private BigDecimal price;
 	private BigDecimal sum;
+	private Boolean isNew;
 	
 	public Integer getId() {
 		return id;
@@ -35,5 +36,10 @@ public class SaleOrderItemBean implements Serializable{
 	public void setSum(BigDecimal sum) {
 		this.sum = sum;
 	}
-	
+	public Boolean getIsNew() {
+		return isNew;
+	}
+	public void setIsNew(Boolean isNew) {
+		this.isNew = isNew;
+	}
 }

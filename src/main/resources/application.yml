@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:sqlserver://localhost:1433;database=pinkish
-    username: sa
-    password: hoang
+    username: hoang
+    password: Password123!
   jpa:
     show-sql : true
   

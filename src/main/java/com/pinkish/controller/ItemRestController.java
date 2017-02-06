@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pinkish.bean.ItemBean;
+import com.pinkish.domain.Category;
+import com.pinkish.domain.CategoryRepository;
 import com.pinkish.domain.Item;
 import com.pinkish.domain.ItemRepository;
 
@@ -21,13 +24,28 @@ public class ItemRestController {
 	@Autowired
     private ItemRepository itemRepository;
 	
+	@Autowired
+    private CategoryRepository categoryRepository;
+	
 	@RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<Item> getEmployeePayment() {
         return (List<Item>) itemRepository.findAll();
     }
     
     @RequestMapping(value= "/add", method = RequestMethod.POST)
-	public Item addPerson(Item item){
-		return new Item();
+	public Item addPerson(ItemBean item){
+    	Item i = new Item();
+    	i.setName(item.getName());
+    	i.setQuantity(item.getQuantity());
+    	i.setCost(item.getCost());
+    	i.setPrice(item.getPrice());
+    	Category cat = categoryRepository.findByName(item.getCategory());
+    	if(cat == null){
+    		Category c = new Category();
+    		c.setName(item.getCategory());
+    		cat = categoryRepository.save(c);
+    	}
+    	i.setCategory(cat);
+		return itemRepository.save(i);
 	}
 }
