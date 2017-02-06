@@ -1,5 +1,7 @@
 package com.pinkish.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -13,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.pinkish.domain.Customer;
+import com.pinkish.domain.CustomerRepository;
 import com.pinkish.domain.CustomersDataTableRepository;
-import com.pinkish.domain.Vendor;
-import com.pinkish.domain.VendorsDataTableRepository;
 
 @RestController()
 @RequestMapping("/customers")
@@ -23,7 +24,8 @@ public class CustomerRestController {
 	private static final Logger logger = LoggerFactory.getLogger(CustomerRestController.class);
 	@Autowired
     private CustomersDataTableRepository customersDataTableRepository;
-	
+	@Autowired
+    private CustomerRepository customersRepository;
 	
     @JsonView(DataTablesOutput.View.class)
     @RequestMapping(value = "/data", method = RequestMethod.GET)
@@ -35,5 +37,10 @@ public class CustomerRestController {
 	public Customer addPerson(Customer customer){
     	return customersDataTableRepository.save(customer);
 	}
-	
+    
+    @JsonView(DataTablesOutput.View.class)
+    @RequestMapping(value="/all", method = RequestMethod.GET)
+    public List<Customer> getVendors() {
+        return (List<Customer>) customersRepository.findAll();
+    }
 }

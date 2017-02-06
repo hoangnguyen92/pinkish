@@ -1,50 +1,136 @@
-<div class="container" id="employees" >
-	<div class="row">
+<div class="container" id="items" >
+	<!-- <div class="row">
 		<div class="col-sm-12">
-			<table id="sample" style="width: 100%">
+			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#itemModal">Create New Item</button>
+		</div>
+	</div> -->
+	<div class="row top-buffer">
+		<div class="col-sm-12">
+			<table id="items-data-table" style="width: 100%">
 				<thead>
 					<tr>
-		                <th>First name</th>
-		                <th>Last name</th>
-		                <th>Email</th>
-		                <th>Phone</th>
-		                <th>Weekly rate</th>
+		                <th>Name</th>
+		                <th>Category</th>
+		                <th>Quantity</th>
+		                <th>Cost</th>
+		                <th>Price</th>
+		                <th>Vendor</th>
 		            </tr>
 				</thead>
 			</table>
 		</div>
 	</div>
-</div>
+<!-- 	<div id="itemModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+	        	<h4 class="modal-title">Create Item</h4>
+			</div>
+			<div class="modal-body">
+				<form id="createItem" action="#">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" class="form-control" id="name" name="name" placeholder="Enter Item Name">
+					</div>
+					<div class="form-group">
+						<label for="name">Quantity</label>
+						<input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter Item Quantity">
+					</div>
+					<div class="form-group">
+						<label for="name">Cost</label>
+						<input type="text" class="form-control" id="cost" name="cost" placeholder="Enter Item Name">
+					</div>
+					<div class="form-group">
+						<label for="name">Price</label>
+						<input type="text" class="form-control" id="price" name="price" placeholder="Enter Item Name">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" data-bind="event:{click: saveItem}">Save</button>
+			</div>
+	    </div>
+	  </div>
+	</div> -->
+ </div>
 
 <script>
 (function($, app) {
-	
 	function ViewModel() {
 		var self = this;
 
+		/* this.saveItem = function(){
+			$("#itemModal").ajaxSubmit({
+				url: '/items/add', 
+				type: 'post',
+				success	: function (item) {
+					$('#items-data-table').dataTable().fnAddData({
+						name: item.name,
+						vendor: item.vendor.name,
+						category: item.category.name,
+						quantity: item.quantity,
+						cost: item.cost,
+						price: item.price
+					});
+					$("#items-data-table").dataTable().fnDraw();
+				}
+			});
+		} */
 		this.render = function() {
-			ko.applyBindings(self, document.getElementById("employees"));
-			var table = $('#sample').DataTable({
-		        'ajax' : '/data/users',
-		        'serverSide' : true,
-		        columns : [
-		        	{ "data": "firstname",
-		        	  "name": "firstname"
-		        	},
-		            { "data": "lastname",
-			          "name": "lastname" 
+			ko.applyBindings(self, document.getElementById("items"));
+			$.getJSON("/items/data", function(data) {
+				var dataTable=[];
+				data.forEach(function(item){
+					dataTable.push({
+						name: item.name,
+						vendor: item.vendor.name,
+						category: item.category.name,
+						quantity: item.quantity,
+						cost: item.cost,
+						price: item.price
+					});
+				});
+				
+				$('#items-data-table').DataTable({
+			        data:dataTable,
+			        "columnDefs": [{
+			            "targets": 3,
+			            "data": "cost",
+			            "render": function ( data, type, full, meta ) {
+							return '$'+data.toFixed(2);
+			            }
 			        },
-		            { "data": "email",
-				      "name": "email" 
-				    },
-		            { "data": "phone",
-					  "name": "phone" 
-					},
-		            { "data": "weeklyRate",
-					  "name": "weeklyRate" 
-					}
-				]
-		    }); 
+			        {
+			            "targets": 4,
+			            "data": "price",
+			            "render": function ( data, type, full, meta ) {
+							return '$'+data.toFixed(2);
+			            }
+			        }],
+			        columns : [
+			        	{ "data": "name",
+			        	  "name": "name"
+			        	},
+			            { "data": "category",
+				          "name": "category"
+				        },
+			            { "data": "quantity",
+					      "name": "quantity" 
+					    },
+			            { "data": "cost",
+				          "name": "cost"
+				        },
+			            { "data": "price",
+					      "name": "price" 
+					    },
+			            { "data": "vendor",
+					      "name": "vendor" 
+					    }
+					]
+			    }); 
+			});
 		};
 	
 	};
@@ -52,6 +138,5 @@
 	// ready
 	var model = new ViewModel();
 	model.render();
-
 })(jQuery, window.mb);
 </script>

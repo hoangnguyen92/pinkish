@@ -1,0 +1,315 @@
+<div class="container" id="newSalesOrder">
+	<div class="stepwizard col-md-offset-3">
+	    <div class="stepwizard-row setup-panel">
+			<div class="stepwizard-step">
+				<a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+				<p>Step 1</p>
+			</div>
+			<div class="stepwizard-step">
+				<a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
+				<p>Step 2</p>
+			</div>
+			<div class="stepwizard-step">
+				<a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled">3</a>
+				<p>Step 3</p>
+			</div>
+	    </div>
+	</div>
+  
+	<form role="form" action="#" method="post" id="saleOrder">
+		<div class="row setup-content" id="step-1">
+			<div class="col-xs-6 col-md-offset-3">
+				<div class="col-md-12">
+					<h3> Step 1</h3>
+					<div class="form-group">
+						<label for="type">Select Type</label>
+						<select class="form-control" id="type" data-bind="value: type, valueUpdate: 'change, keyup'">
+							<option value="sell" >Sell</option>
+							<option value="buy" >Buy</option>
+						</select>
+					</div>
+					<button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button>
+				</div>
+			</div>
+		</div>
+		<div class="row setup-content" id="step-2">
+			<div class="col-xs-6 col-md-offset-3">
+				<div class="col-md-12">
+					<h3> Step 2</h3>
+					<div class="form-group" data-bind="visible: type() == 'buy'">
+						<div class="row">
+							<div class="col-md-10">
+								<label for="vendors">Select Vendor</label>
+								<select class="form-control" id="vendors"
+										data-bind="options: vendors,
+							                       optionsText: 'name',
+							                       optionsValue: 'id',
+							                       value: vendorId,
+							                       optionsCaption: 'Choose...'">
+								</select>
+							</div>
+							<div class="col-md-2 bottom-align-text">
+								<button type="button" class="btn btn-default" aria-label="Left Align" data-bind="{event: {click: getVendors}}">
+								  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" data-bind="visible: type() == 'sell'">
+						<div class="row">
+							<div class="col-md-10">
+								<label for="exampleSelect1">Select Customer</label>
+								<select class="form-control" id="customer"
+										data-bind="options: customers,
+							                       optionsText: 'name',
+							                       optionsValue: 'id',
+							                       value: customerId,
+							                       optionsCaption: 'Choose...'">
+								</select>
+								<button type="button" class="btn btn-default" aria-label="Left Align" data-bind="{event: {click: getCustomers}}">
+								  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+								</button>
+							</div>
+							<div class="col-md-2 bottom-align-text">
+								
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row" data-bind="visible: type() == 'buy'">
+							<div class="col-md-10">
+								<label for="exampleSelect1">Create new Item</label>
+							</div>
+							<div class="col-md-2 bottom-align-text pull-right">
+								<button type="button" class="btn btn-default" aria-label="Left Align">
+								  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+								</button>
+							</div>
+						</div>
+						<div class="row" data-bind="visible: type() == 'sell'">
+							<div class="col-md-10">
+								<label for="exampleSelect1">Add Item</label>
+							</div>
+							<div class="col-md-2 bottom-align-text pull-right">
+								<input id="tags"/>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12 bottom-align-text">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Item name</th>
+											<th>Quantity</th>
+											<th>Price</th>
+											<th>Sum</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody data-bind="foreach: items">
+										<tr>
+											<td>
+												<input data-bind="value: itemName" disabled="disabled"/>
+												<input  type="hidden" data-bind="value: id"/>
+											</td>
+											<td>
+												<input data-bind="value: quantity , event:{change: $parent.changeQuantity}"/>
+											</td>
+											<td>
+												<input data-bind="value: price , event:{change: $parent.changeQuantity}"/>
+											</td>
+											<td data-bind="text: sum"></td>
+											<td>
+												<button type="button" class="btn btn-danger" data-bind="event:{click: $parent.removeItem}">Remove</button>
+											</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="3">TOTAL:</td>
+											<td data-bind="text: total"></td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+					<button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Next</button>
+				</div>
+			</div>
+		</div>
+		<div class="row setup-content" id="step-3">
+			<div class="col-xs-6 col-md-offset-3">
+				<div class="col-md-12">
+					<h3> Step 3</h3>
+					<span data-bind="text: message"></span>
+					<button class="btn btn-success btn-lg pull-right" data-bind="event: {click: submit}">Submit</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<script>
+(function($, app) {
+	$("form").bind("keypress", function(e) {
+	   if (e.keyCode == 13) {
+	      return false;
+	   }
+	});
+	var navListItems = $('div.setup-panel div a'),
+	allWells = $('.setup-content'),
+	allNextBtn = $('.nextBtn');
+	
+	allWells.hide();
+	
+	navListItems.click(function (e) {
+	  e.preventDefault();
+	  var $target = $($(this).attr('href')),
+	          $item = $(this);
+	
+	  if (!$item.hasClass('disabled')) {
+	      navListItems.removeClass('btn-primary').addClass('btn-default');
+	      $item.addClass('btn-primary');
+	      allWells.hide();
+	      $target.show();
+	      $target.find('input:eq(0)').focus();
+	  }
+	});
+	
+	allNextBtn.click(function(){
+	  var curStep = $(this).closest(".setup-content"),
+	      curStepBtn = curStep.attr("id"),
+	      nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+	      curInputs = curStep.find("input[type='text'],input[type='url']"),
+	      isValid = true;
+	
+	  $(".form-group").removeClass("has-error");
+	  for(var i=0; i<curInputs.length; i++){
+	      if (!curInputs[i].validity.valid){
+	          isValid = false;
+	          $(curInputs[i]).closest(".form-group").addClass("has-error");
+	      }
+	  }
+	
+	  if (isValid)
+	      nextStepWizard.removeAttr('disabled').trigger('click');
+	});
+	
+	$('div.setup-panel div a.btn-primary').trigger('click');
+	
+	function ViewModel() {
+		var self = this;
+		
+		this.total = ko.observable(0);
+		this.type = ko.observable();
+		this.vendorId = ko.observable();
+		this.customerId = ko.observable();
+		this.vendors = ko.observableArray();
+		this.customers = ko.observableArray();
+		this.items = ko.observableArray();
+		this.message = ko.observable("");
+
+		this.render = function() {
+			ko.applyBindings(self, document.getElementById("newSalesOrder"));
+			
+			this.getVendors();
+			this.getCustomers();
+			
+			$( "#tags" ).autocomplete({
+			source: function(request, response) {
+				var term = request.term;
+				// else request it
+				$.getJSON("/items/data", request, function(data, status, xhr) {
+					if (data) {
+						var items = [];
+						if (data) {
+							for ( var i = 0; i < data.length; i++) {
+								items.push({
+									id : data[i].id,
+									label : data[i].name,
+									value : data[i].name,
+									price : data[i].price,
+								});
+							}
+						}
+						response(items);
+					}
+				});
+			},
+			select: function( event, ui ) {
+				
+				self.items.push({
+					id : ui.item.id,
+					itemName : ui.item.label,
+					quantity : 0,
+					price : ui.item.price,
+					sum : 0
+				});
+			}
+		    });
+		};
+		this.submit = function(){
+			$("#saleOrder").ajaxSubmit({
+				url: '/sale-order/add', 
+				data: {
+					type: self.type(),
+					customerId: self.customerId(),
+					vendorId: self.vendorId(),
+					items: self.items()
+				},
+				type: 'post',
+				error	: function (item) {
+					console.log(arguments);
+					self.message("Order have been saved successfully!");
+				},
+				success	: function (item) {
+					console.log(success);
+					console.log(arguments);
+					self.message("Order have been saved successfully!");
+				}
+			});
+		}
+		this.refreshTotal = function(){
+			self.total(0);
+			self.items().forEach(function(i){
+				self.total(self.total() + i.sum);
+			});
+		}
+		this.changeQuantity = function(){
+			self.items.remove(this);
+			this.sum = this.quantity * this.price;
+			self.items.push(this);
+			self.refreshTotal();
+		}
+		this.removeItem = function(){
+			self.items.remove(this);
+			self.refreshTotal();
+		}
+		this.getVendors = function(){
+			self.vendors.removeAll();
+			$.getJSON("/vendors/all", function(data) {
+				data.forEach(function(item){
+					self.vendors.push(item);
+				});
+			});
+		}
+		
+		this.getCustomers = function(){
+			self.customers.removeAll();
+			$.getJSON("/customers/all", function(data) {
+				data.forEach(function(item){
+					self.customers.push(item);
+				});
+			});
+		}
+	
+	};
+
+	// ready
+	var model = new ViewModel();
+	model.render();
+
+})(jQuery, window.mb);
+</script>

@@ -28,10 +28,9 @@ import com.pinkish.domain.VendorsDataTableRepository;
 @RestController
 public class EmployeeRestController {
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeRestController.class);
+	
 	@Autowired
     private EmployeesDataTableRepository employeesDataTableRepository;
-	@Autowired
-    private VendorsDataTableRepository vendorsDataTableRepository;
 	
 	@Autowired
     private EmployeesPaymentRepository employeesPaymentRepository;
