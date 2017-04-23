@@ -102,7 +102,7 @@
 			        <li class="dropdown">
 			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reporting<span class="caret"></span></a>
 			          <ul class="dropdown-menu" role="menu">
-			            <li><a href="#">Total Balance</a></li>
+			            <li><a href="#totalBalance"  data-bind="event:{click: loadPage('#totalBalance') }">Total Balance</a></li>
 			            <li><a href="#">Report by most sold products</a></li>
 			            <li><a href="#">Report by customers</a></li>
 			          </ul>
@@ -123,6 +123,7 @@
 				<div id="customers" class="page-container" data-page="/customers.html"></div>
 				<div id="newSalesOrder" class="page-container" data-page="/new-sales-order.html"></div>
 				<div id="allSalesOrder" class="page-container" data-page="/all-sale-orders.html"></div>
+				<div id="totalBalance" class="page-container" data-page="/total-balance.html"></div>
 			</div>
     	</div>
  
@@ -134,9 +135,11 @@
 		<script type="text/javascript" src="/js/knockout-3.4.1.js"></script>
 		<script type="text/javascript" src="/js/jquery.spring-friendly.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/js/Chart.js"></script>
 		<!-- <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script> -->
 		
 		<script type="text/javascript">
+			Chart.defaults.global.maintainAspectRatio = false;
 			$.fn.loadEmbedded = function(callback){
 				var container = $(this);
 				$(".page-container").hide();

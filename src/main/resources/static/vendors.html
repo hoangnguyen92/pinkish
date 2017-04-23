@@ -13,6 +13,7 @@
 		                <th>Address</th>
 		                <th>Telephone</th>
 		                <th>Mol</th>
+		                <th>Bulstat</th>
 		            </tr>
 				</thead>
 			</table>
@@ -42,6 +43,10 @@
 					<div class="form-group">
 						<label for="sum">Mol</label>
 						<input type="text" class="form-control" id="mol" name="mol" placeholder="Enter vendors mol">
+					</div>
+					<div class="form-group">
+						<label for="sum">Bulstat</label>
+						<input type="text" class="form-control" id="customerBulstat" name="bulstat" placeholder="Enter customer bulstat">
 					</div>
 				</form>
 			</div>
@@ -85,6 +90,9 @@
 				    },
 		            { "data": "mol",
 					  "name": "mol" 
+					},
+		            { "data": "bulstat",
+					  "name": "bulstat" 
 					}
 				]
 		    }); 

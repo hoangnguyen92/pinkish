@@ -33,30 +33,25 @@
 </div>
 
 <script>
-/* $.fn.dataTableExt.afnFiltering.push(function(oSettings, aData, iDataIndex){
-	var dateStart = $("#from").datepicker('getDate')
-	var dateEnd = $("#to").datepicker('getDate');
-
-	var from = aData[1].split("/");
-	var evalDate = new Date(from[2], from[1] - 1, from[0]);
-	if ((dateStart == null && dateEnd== null) ||
-        (dateStart == null  && evalDate.getTime() <= dateEnd.getTime()) ||
-        (dateStart.getTime() <= evalDate.getTime() && dateEnd== null) ||
-        (dateStart.getTime() <= evalDate.getTime() && evalDate.getTime() <= dateEnd.getTime()))
-       {
-           return true;
-       }
-	return false;
-}); */
+function pay(id){
+	$.ajax({
+		  type: "POST",
+		  url: "/sale-order/pay",
+		  data: {
+			  salesId : id
+		  },
+		  success: function(){
+			  $("#employees-payment-data-table").dataTable().fnDraw();
+		  }
+		});
+}
 (function($, app) {
 	
-	function pay(id){
-		console.log(id);
-	}
 	
 	function ViewModel() {
 		var self = this;
 		this.render = function() {
+			ko.applyBindings(self, document.getElementById("all-sale-orders"));
 			$.getJSON("/sale-order/data", function(data) {
 				var dataTable=[];
 				data.forEach(function(item){
@@ -83,7 +78,9 @@
 			            "targets": 5,
 			            "render": function ( data, type, full, meta ) {
 			            	if(full.status === 1)
-			            		return '<button type="button" class="btn btn-info btn-sm pull-right" onclick=pay('+full.id+')">Pay</button>';
+			            		return '<button type="button" class="btn btn-info btn-sm pull-right" onclick="pay('+full.id+')"">Pay</button>';
+		            		else
+		            			return "";
 			            }
 			        },{
 			            "targets": 4,
@@ -115,7 +112,6 @@
 					]
 			    }); 
 			});
-			ko.applyBindings(self, document.getElementById("all-sale-orders"));
 		};
 	
 	};

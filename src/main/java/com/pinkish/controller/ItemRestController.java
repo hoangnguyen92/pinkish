@@ -2,6 +2,8 @@ package com.pinkish.controller;
 
 import java.util.List;
 
+import javax.ws.rs.PathParam;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,17 @@ public class ItemRestController {
     private CategoryRepository categoryRepository;
 	
 	@RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Item> getEmployeePayment() {
+    public @ResponseBody List<Item> getItems() {
         return (List<Item>) itemRepository.findAll();
+    }
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<Item> searchItem(@PathParam("term") String term) {
+		if(term.equalsIgnoreCase("all")){
+			return (List<Item>) itemRepository.findAll();
+		}
+
+		return itemRepository.findByNameContaining(term);
     }
     
     @RequestMapping(value= "/add", method = RequestMethod.POST)

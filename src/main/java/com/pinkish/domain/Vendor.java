@@ -39,6 +39,18 @@ private static final long serialVersionUID = 1L;
     @Column(name = "mol", nullable = true)
     @JsonView(DataTablesOutput.View.class)
     private String mol;
+    
+    @Column(name = "bulstat", nullable = true)
+	@JsonView(DataTablesOutput.View.class)
+    private String bulstat;
+	
+	public String getBulstat() {
+		return bulstat;
+	}
+
+	public void setBulstat(String bulstat) {
+		this.bulstat = bulstat;
+	}
 
 	public String getName() {
 		return name;

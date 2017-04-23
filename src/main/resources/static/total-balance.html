@@ -1,0 +1,62 @@
+<div class="container" id="total-balance" >
+	<canvas id="totalBalanceChart" width="400" height="400"></canvas>
+</div>
+
+<script>
+(function($, app) {
+	function ViewModel() {
+		var self = this;
+		
+		this.render = function() {
+			ko.applyBindings(self, document.getElementById("total-balance"));
+			
+			$.getJSON("/sale-order/total-balance",function(data, status, xhr) {
+				if(data){
+					var ctx = document.getElementById("totalBalanceChart");
+					var items = [];
+					if (data) {
+						for ( var i = 0; i < data.length; i++) {
+							items.push(data[i].sum);
+						}
+					}
+					var data = {
+						    labels: [
+						        "Paid Sales(lv.)",
+						        "Unpaid Sales(lv.)",
+						        "Paid Purchase(lv.)",
+						        "Unpaid Purchase(lv.)"
+						    ],
+						    datasets: [
+						        {
+						            data: items,
+						            backgroundColor: [
+						                "#FF6384",
+						                "#36A2EB",
+						                "#FFCE56",
+						                "#00FF13"
+						            ],
+						            hoverBackgroundColor: [
+						                "#FF6384",
+						                "#36A2EB",
+						                "#FFCE56",
+						                "#00FF13"
+						            ]
+						        }]
+						};
+		
+					var myPieChart = new Chart(ctx,{
+					    type: 'pie',
+					    data: data
+					});
+				}
+			});
+
+		};
+	
+	};
+
+	// ready
+	var model = new ViewModel();
+	model.render();
+})(jQuery, window.mb);
+</script>

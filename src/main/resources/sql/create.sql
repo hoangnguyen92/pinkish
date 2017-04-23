@@ -114,3 +114,6 @@ CREATE TABLE [pinkish].[dbo].[sale_orders_items](
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+
+ALTER TABLE pinkish.dbo.vendors ADD bulstat VARCHAR(20) NULL; 
+ALTER TABLE pinkish.dbo.customers ADD bulstat VARCHAR(20) NULL; 

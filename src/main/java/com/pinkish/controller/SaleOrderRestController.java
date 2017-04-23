@@ -9,11 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pinkish.bean.SaleOrderBean;
 import com.pinkish.bean.SaleOrderItemBean;
+import com.pinkish.bean.TotalBalanceReportBean;
 import com.pinkish.domain.CustomerRepository;
 import com.pinkish.domain.Item;
 import com.pinkish.domain.ItemRepository;
@@ -43,7 +45,19 @@ public class SaleOrderRestController {
     public @ResponseBody List<SaleOrder> getEmployeePayment() {
         return (List<SaleOrder>) saleOrderRepository.findAll();
     }
-    
+	@RequestMapping(value = "/pay", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody SaleOrder pay(@RequestParam("salesId") int id) {
+		SaleOrder so = saleOrderRepository.findById(id);
+		so.setStatus(2);
+		so = saleOrderRepository.save(so);
+        return so;
+    }
+	
+	@RequestMapping(value = "/total-balance", method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<TotalBalanceReportBean> getTotalBalance() {
+        return saleOrderRepository.generateTotalReport();
+    }
+	
     @RequestMapping(value= "/add", method = RequestMethod.POST)
 	public SaleOrder addPerson(SaleOrderBean item){
     	

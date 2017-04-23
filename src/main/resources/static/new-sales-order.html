@@ -260,7 +260,7 @@
 			source: function(request, response) {
 				var term = request.term;
 				// else request it
-				$.getJSON("/items/data", request, function(data, status, xhr) {
+				$.getJSON("/items/search", request, function(data, status, xhr) {
 					if (data) {
 						var items = [];
 						if (data) {
@@ -300,12 +300,9 @@
 				},
 				type: 'post',
 				error	: function (item) {
-					console.log(arguments);
 					self.message("Order have been saved successfully!");
 				},
 				success	: function (item) {
-					console.log(success);
-					console.log(arguments);
 					self.message("Order have been saved successfully!");
 				}
 			});
