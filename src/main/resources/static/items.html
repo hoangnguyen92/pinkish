@@ -1,9 +1,9 @@
 <div class="container" id="items" >
-	<!-- <div class="row">
+	<div class="row">
 		<div class="col-sm-12">
 			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#itemModal">Create New Item</button>
 		</div>
-	</div> -->
+	</div>
 	<div class="row top-buffer">
 		<div class="col-sm-12">
 			<table id="items-data-table" style="width: 100%">
@@ -20,7 +20,7 @@
 			</table>
 		</div>
 	</div>
-<!-- 	<div id="itemModal" class="modal fade" role="dialog">
+	<div id="itemModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 	    <div class="modal-content">
 			<div class="modal-header">
@@ -30,20 +30,34 @@
 			<div class="modal-body">
 				<form id="createItem" action="#">
 					<div class="form-group">
-						<label for="name">Name</label>
+						<label for="name">Item Name</label>
 						<input type="text" class="form-control" id="name" name="name" placeholder="Enter Item Name">
+					</div>
+					<div class="form-group">
+						<label for="category">Item Category</label>
+						<input type="text" class="form-control" id="category" name="category" placeholder="Enter Item Category">
 					</div>
 					<div class="form-group">
 						<label for="name">Quantity</label>
 						<input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter Item Quantity">
 					</div>
 					<div class="form-group">
-						<label for="name">Cost</label>
-						<input type="text" class="form-control" id="cost" name="cost" placeholder="Enter Item Name">
+						<label for="name">Item cost</label>
+						<input type="text" class="form-control" id="cost" name="cost" placeholder="Enter Item Cost">
 					</div>
 					<div class="form-group">
-						<label for="name">Price</label>
-						<input type="text" class="form-control" id="price" name="price" placeholder="Enter Item Name">
+						<label for="name">Item price</label>
+						<input type="text" class="form-control" id="price" name="price" placeholder="Enter Item Price">
+					</div>
+					<div class="form-group">
+						<label for="name">Vendor</label>
+						<select class="form-control" id="vendors" name="vendorId"
+								data-bind="options: vendors,
+					                       optionsText: 'name',
+					                       optionsValue: 'id',
+					                       value: vendorId,
+					                       optionsCaption: 'Choose...'">
+						</select>
 					</div>
 				</form>
 			</div>
@@ -53,39 +67,46 @@
 			</div>
 	    </div>
 	  </div>
-	</div> -->
+	</div>
  </div>
 
 <script>
 (function($, app) {
 	function ViewModel() {
 		var self = this;
+		this.vendorId = ko.observable();
+		this.vendors = ko.observableArray();
 
-		/* this.saveItem = function(){
-			$("#itemModal").ajaxSubmit({
+		this.saveItem = function(){
+			$("#createItem").ajaxSubmit({
 				url: '/items/add', 
 				type: 'post',
 				success	: function (item) {
-					$('#items-data-table').dataTable().fnAddData({
-						name: item.name,
-						vendor: item.vendor.name,
-						category: item.category.name,
-						quantity: item.quantity,
-						cost: item.cost,
-						price: item.price
+					 $('#items').loadEmbedded(function(response, status, xhr) {
+						if (status == "error") {
+							if (xhr.status == 403)
+								$(this).html(response);
+							else {
+								var msg = "Error occurred during load: ";
+								$(this).html(msg + xhr.status + " " + xhr.statusText );
+							}
+						}
 					});
-					$("#items-data-table").dataTable().fnDraw();
 				}
 			});
-		} */
+		}
 		this.render = function() {
+			ko.cleanNode(document.getElementById("items"));
 			ko.applyBindings(self, document.getElementById("items"));
+			
+			this.getVendors();
+			
 			$.getJSON("/items/data", function(data) {
 				var dataTable=[];
 				data.forEach(function(item){
 					dataTable.push({
 						name: item.name,
-						vendor: item.vendor.name,
+						vendor: item.vendor ? item.vendor.name : "",
 						category: item.category.name,
 						quantity: item.quantity,
 						cost: item.cost,
@@ -132,6 +153,15 @@
 			    }); 
 			});
 		};
+		
+		this.getVendors = function(){
+			self.vendors.removeAll();
+			$.getJSON("/vendors/all", function(data) {
+				data.forEach(function(item){
+					self.vendors.push(item);
+				});
+			});
+		}
 	
 	};
 

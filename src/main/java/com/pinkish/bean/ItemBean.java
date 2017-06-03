@@ -12,6 +12,7 @@ public class ItemBean implements Serializable{
 	private Integer quantity;
 	private BigDecimal cost;
 	private BigDecimal price;
+	private Integer vendorId;
 	public String getName() {
 		return name;
 	}
@@ -41,6 +42,12 @@ public class ItemBean implements Serializable{
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public Integer getVendorId() {
+		return vendorId;
+	}
+	public void setVendorId(Integer vendorId) {
+		this.vendorId = vendorId;
 	}
 	
 }

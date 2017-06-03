@@ -17,6 +17,7 @@ import com.pinkish.domain.Category;
 import com.pinkish.domain.CategoryRepository;
 import com.pinkish.domain.Item;
 import com.pinkish.domain.ItemRepository;
+import com.pinkish.domain.VendorRepository;
 
 @RestController()
 @RequestMapping("/items")
@@ -25,6 +26,8 @@ public class ItemRestController {
 	
 	@Autowired
     private ItemRepository itemRepository;
+	@Autowired
+    private VendorRepository vendorRepository;
 	
 	@Autowired
     private CategoryRepository categoryRepository;
@@ -50,6 +53,7 @@ public class ItemRestController {
     	i.setQuantity(item.getQuantity());
     	i.setCost(item.getCost());
     	i.setPrice(item.getPrice());
+    	i.setVendor(vendorRepository.findById(item.getVendorId()));
     	Category cat = categoryRepository.findByName(item.getCategory());
     	if(cat == null){
     		Category c = new Category();

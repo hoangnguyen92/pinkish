@@ -74,6 +74,7 @@
 			});
 		}
 		this.render = function() {
+			ko.cleanNode(document.getElementById("customers"));
 			ko.applyBindings(self, document.getElementById("customers"));
 			var table = $('#customersGrid').DataTable({
 		        'ajax' : '/customers/data',

@@ -8,6 +8,7 @@
 		var self = this;
 		
 		this.render = function() {
+			ko.cleanNode(document.getElementById("total-balance"));
 			ko.applyBindings(self, document.getElementById("total-balance"));
 			
 			$.getJSON("/sale-order/total-balance",function(data, status, xhr) {

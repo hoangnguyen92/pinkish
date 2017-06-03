@@ -1,4 +1,4 @@
-<div class="container" id="employees" >
+<div class="container" id="employeesContainer" >
 	<div class="row">
 		<div class="col-sm-12">
 			<table id="sample" style="width: 100%">
@@ -23,6 +23,7 @@
 		var self = this;
 
 		this.render = function() {
+			ko.cleanNode(document.getElementById("employees"));
 			ko.applyBindings(self, document.getElementById("employees"));
 			var table = $('#sample').DataTable({
 		        'ajax' : '/data/users',

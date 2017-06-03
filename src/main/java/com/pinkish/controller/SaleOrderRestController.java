@@ -55,7 +55,12 @@ public class SaleOrderRestController {
 	
 	@RequestMapping(value = "/total-balance", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<TotalBalanceReportBean> getTotalBalance() {
-        return saleOrderRepository.generateTotalReport();
+		List<TotalBalanceReportBean> result = new ArrayList<>();
+		result.add(saleOrderRepository.generateTotalPaidSales());
+		result.add(saleOrderRepository.generateTotalUnpaidSales());
+		result.add(saleOrderRepository.generateTotalPaidPurchase());
+		result.add(saleOrderRepository.generateTotalUnpaidPurchase());
+        return result;
     }
 	
     @RequestMapping(value= "/add", method = RequestMethod.POST)
@@ -101,9 +106,10 @@ public class SaleOrderRestController {
     			SaleOrderItem i = new SaleOrderItem();
     			Item it = itemsRepository.findById(ib.getId());
     			if(ib.getIsNew()){
-    				it.setQuantity(it.getQuantity()+ib.getQuantity());
-    			}else{
     				it.setQuantity(ib.getQuantity());
+    				it.setVendor(vendorsRepository.findById(item.getVendorId()));
+    			}else{
+    				it.setQuantity(it.getQuantity()+ib.getQuantity());
     			}
     			it = itemsRepository.save(it);
     			i.setItem(it);

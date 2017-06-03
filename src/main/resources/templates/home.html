@@ -71,7 +71,7 @@
 			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Management<span class="caret"></span></a>
 			          <ul class="dropdown-menu" role="menu">
 			            <li><a href="#employees" data-bind="event:{click: loadPage('#employees') }">Employees</a></li>
-			            <li><a href="#employees-payments" data-bind="event:{click: loadPage('#employee-payments') }">Employee payments</a></li>
+			            <li><a href="#payments" data-bind="event:{click: loadPage('#payments') }">Employee payments</a></li>
 			          </ul>
 			        </li>
 			        <li class="dropdown">
@@ -116,8 +116,9 @@
 			</nav>
 			
 			<div id="container">
+				<img id="defaultImage" src="https://images.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png" alt="Smiley face" height="42" width="42"/>
 				<div id="employees" class="page-container" data-page="/employees.html"></div>
-				<div id="employee-payments" class="page-container" data-page="/employee-payments.html"></div>
+				<div id="payments" class="page-container" data-page="/employee-payments.html"></div>
 				<div id="items" class="page-container" data-page="/items.html"></div>
 				<div id="vendors" class="page-container" data-page="/vendors.html"></div>
 				<div id="customers" class="page-container" data-page="/customers.html"></div>
@@ -141,6 +142,16 @@
 		<script type="text/javascript">
 			Chart.defaults.global.maintainAspectRatio = false;
 			$.fn.loadEmbedded = function(callback){
+				$("#employees").html("");
+				$("#payments").html("");
+				$("#items").html("");
+				$("#vendors").html("");
+				$("#customers").html("");
+				$("#newSalesOrder").html("");
+				$("#allSalesOrder").html("");
+				$("#totalBalance").html("");
+				$('#defaultImage').show();
+				
 				var container = $(this);
 				$(".page-container").hide();
 				if(container.is(":empty")) {
@@ -150,6 +161,7 @@
 						if(params)
 							page += "?" + params;
 						container.load(page, callback);
+						$('#defaultImage').hide();
 					}
 				}
 				$(this).show();
@@ -174,6 +186,7 @@
 					var self = this;
 		
 					this.render = function() {
+						ko.cleanNode(document.getElementById("app"));
 						ko.applyBindings(self, document.getElementById("app"));
 					};
 					

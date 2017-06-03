@@ -16,7 +16,7 @@
 	</div> -->
 	<div class="row">
 		<div class="col-sm-12">
-			<table id="employees-payment-data-table" style="width: 100%">
+			<table id="all-sales-data-table" style="width: 100%">
 				<thead>
 					<tr>
 		                <th>Type</th>
@@ -41,7 +41,16 @@ function pay(id){
 			  salesId : id
 		  },
 		  success: function(){
-			  $("#employees-payment-data-table").dataTable().fnDraw();
+			  $('#allSalesOrder').loadEmbedded(function(response, status, xhr) {
+					if (status == "error") {
+						if (xhr.status == 403)
+							$(this).html(response);
+						else {
+							var msg = "Error occurred during load: ";
+							$(this).html(msg + xhr.status + " " + xhr.statusText );
+						}
+					}
+				});
 		  }
 		});
 }
@@ -51,6 +60,7 @@ function pay(id){
 	function ViewModel() {
 		var self = this;
 		this.render = function() {
+			ko.cleanNode(document.getElementById("all-sale-orders"));
 			ko.applyBindings(self, document.getElementById("all-sale-orders"));
 			$.getJSON("/sale-order/data", function(data) {
 				var dataTable=[];
@@ -72,7 +82,7 @@ function pay(id){
 					dataTable.push(i);
 				});
 				
-				$('#employees-payment-data-table').DataTable({
+				$('#all-sales-data-table').DataTable({
 			        data:dataTable,
 			        "columnDefs": [{
 			            "targets": 5,

@@ -21,6 +21,7 @@
 					<tr>
 		                <th>Employee</th>
 		                <th>Pay Date</th>
+		                <th>Pay Date sort</th>
 		                <th>Sum</th>
 		            </tr>
 				</thead>
@@ -69,15 +70,22 @@ $.fn.dataTableExt.afnFiltering.push(function(oSettings, aData, iDataIndex){
 
 	var from = aData[1].split("/");
 	var evalDate = new Date(from[2], from[1] - 1, from[0]);
-	if ((dateStart == null && dateEnd== null) ||
-        (dateStart == null  && evalDate.getTime() <= dateEnd.getTime()) ||
-        (dateStart.getTime() <= evalDate.getTime() && dateEnd== null) ||
-        (dateStart.getTime() <= evalDate.getTime() && evalDate.getTime() <= dateEnd.getTime()))
-       {
-           return true;
-       }
+	if ( Object.prototype.toString.call(evalDate) === "[object Date]" 
+			&& Object.prototype.toString.call(dateStart) === "[object Date]"
+			&& Object.prototype.toString.call(dateEnd) === "[object Date]") {
+		if ((dateStart == null && dateEnd== null) ||
+	        (dateStart == null  && evalDate.getTime() <= dateEnd.getTime()) ||
+	        (dateStart && evalDate && dateStart.getTime() <= evalDate.getTime() && dateEnd== null) ||
+	        (dateStart && evalDate && dateStart.getTime() <= evalDate.getTime() && evalDate.getTime() <= dateEnd.getTime()))
+	       {
+	           return true;
+	       }
+	}else{
+		return true;
+	}
 	return false;
 });
+
 (function($, app) {
 	$( "#from" ).datepicker({
 		defaultDate: "+1w",
@@ -118,6 +126,7 @@ $.fn.dataTableExt.afnFiltering.push(function(oSettings, aData, iDataIndex){
 			});
 		}
 		this.render = function() {
+			ko.cleanNode(document.getElementById("employees-payment"));
 			ko.applyBindings(self, document.getElementById("employees-payment"));
 			$.getJSON("/employee", function(data) {
 				data.forEach(function(item){
@@ -142,13 +151,21 @@ $.fn.dataTableExt.afnFiltering.push(function(oSettings, aData, iDataIndex){
 			            "data": "paymentDate",
 			            "render": function ( data, type, full, meta ) {
 							var date = new Date(data);
-							return (date.getDate() + 1) + '/' + (date.getMonth()+1) + '/' +  date.getFullYear();
+							return ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' +  date.getFullYear();
 			            }
-			        }],
+			        },{
+		                "targets": [ 2 ],
+		                "visible": false,
+		                "searchable": false
+		            },
+		            { 'orderData':[2], 'targets': [1] }],
 			        columns : [
 			        	{ "data": "employee",
 			        	  "name": "firstname"
 			        	},
+			            { "data": "paymentDate",
+				          "name": "paymentDate"
+				        },
 			            { "data": "paymentDate",
 				          "name": "paymentDate"
 				        },

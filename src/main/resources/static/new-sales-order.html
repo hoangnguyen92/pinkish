@@ -1,4 +1,4 @@
-<div class="container" id="newSalesOrder">
+<div class="container" id="newSalesOrderContainer">
 	<div class="stepwizard col-md-offset-3">
 	    <div class="stepwizard-row setup-panel">
 			<div class="stepwizard-step">
@@ -49,9 +49,9 @@
 								</select>
 							</div>
 							<div class="col-md-2 bottom-align-text">
-								<button type="button" class="btn btn-default" aria-label="Left Align" data-bind="{event: {click: getVendors}}">
+								<!-- <button type="button" class="btn btn-default" aria-label="Left Align" data-bind="{event: {click: getVendors}}">
 								  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-								</button>
+								</button> -->
 							</div>
 						</div>
 					</div>
@@ -66,9 +66,9 @@
 							                       value: customerId,
 							                       optionsCaption: 'Choose...'">
 								</select>
-								<button type="button" class="btn btn-default" aria-label="Left Align" data-bind="{event: {click: getCustomers}}">
+								<!-- <button type="button" class="btn btn-default" aria-label="Left Align" data-bind="{event: {click: getCustomers}}">
 								  <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-								</button>
+								</button> -->
 							</div>
 							<div class="col-md-2 bottom-align-text">
 								
@@ -250,8 +250,8 @@
 		this.items = ko.observableArray();
 		this.message = ko.observable("");
 
-		this.render = function() {
-			ko.applyBindings(self, document.getElementById("newSalesOrder"));
+		this.render = function() {			
+			ko.applyBindings(self, document.getElementById("newSalesOrderContainer"));
 			
 			this.getVendors();
 			this.getCustomers();
@@ -349,7 +349,7 @@
 					self.items.push({
 						id : item.id,
 						itemName : item.name,
-						quantity : 0,
+						quantity : item.quantity,
 						price : item.price,
 						sum : 0,
 						isNew: true

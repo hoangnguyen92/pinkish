@@ -74,6 +74,7 @@
 			});
 		}
 		this.render = function() {
+			ko.cleanNode(document.getElementById("vendors"));
 			ko.applyBindings(self, document.getElementById("vendors"));
 			var table = $('#vendorsGrid').DataTable({
 		        'ajax' : '/vendors/data',
