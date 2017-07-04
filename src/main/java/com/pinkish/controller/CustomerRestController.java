@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,9 +39,14 @@ public class CustomerRestController {
     	return customersDataTableRepository.save(customer);
 	}
     
-    @JsonView(DataTablesOutput.View.class)
+    
     @RequestMapping(value="/all", method = RequestMethod.GET)
-    public List<Customer> getVendors() {
+    public List<Customer> getCustomer() {
         return (List<Customer>) customersRepository.findAll();
+    }
+    
+    @RequestMapping(value="/{customerId}", method = RequestMethod.GET)
+    public Customer getCustomers(@PathVariable Integer customerId) {
+    	return (Customer) customersRepository.findById(customerId);
     }
 }

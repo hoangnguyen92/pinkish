@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +42,10 @@ public class VendorRestController {
     @RequestMapping(value="/all", method = RequestMethod.GET)
     public List<Vendor> getVendors() {
         return (List<Vendor>) vendorsRepository.findAll();
+    }
+    
+    @RequestMapping(value="/{vendorId}", method = RequestMethod.GET)
+    public Vendor getCustomers(@PathVariable Integer vendorId) {
+    	return (Vendor) vendorsRepository.findById(vendorId);
     }
 }
